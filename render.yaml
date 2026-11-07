@@ -4,7 +4,7 @@ services:
     name: carrito-gateway
     env: node
     plan: free
-    rootDir: backend/gateway
+    rootDir: servicios/gateway
     buildCommand: npm install
     startCommand: node server.js
     envVars:
@@ -31,7 +31,7 @@ services:
     name: carrito-auth-service
     env: node
     plan: free
-    rootDir: backend/auth-service
+    rootDir: servicios/auth-service
     buildCommand: npm install
     startCommand: node server.js
     envVars:
@@ -47,7 +47,7 @@ services:
     name: carrito-products-service
     env: node
     plan: free
-    rootDir: backend/products-service
+    rootDir: servicios/products-service
     buildCommand: npm install
     startCommand: node server.js
     envVars:
@@ -61,7 +61,7 @@ services:
     name: carrito-orders-service
     env: node
     plan: free
-    rootDir: backend/orders-service
+    rootDir: servicios/orders-service
     buildCommand: npm install
     startCommand: node server.js
     envVars:
