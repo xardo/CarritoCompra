@@ -20,8 +20,8 @@ export default function LoginScreen() {
 
   const [isRegistering, setIsRegistering] = useState(false);
   const [nombre, setNombre] = useState('');
-  const [correo, setCorreo] = useState('admin@demo.com');
-  const [contrasena, setContrasena] = useState('123456');
+  const [correo, setCorreo] = useState('');
+  const [contrasena, setContrasena] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -86,7 +86,6 @@ export default function LoginScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.card}>
           <View style={styles.header}>
-            <Text style={styles.badge}>Microservicio Auth</Text>
             <Text style={styles.title}>{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</Text>
             <Text style={styles.subtitle}>
               {isRegistering
@@ -125,6 +124,8 @@ export default function LoginScreen() {
               onChangeText={setCorreo}
               keyboardType="email-address"
               autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect={false}
             />
           </View>
 
@@ -132,11 +133,13 @@ export default function LoginScreen() {
             <Text style={styles.label}>Contraseña</Text>
             <TextInput
               style={styles.input}
-              placeholder="Mínimo 6 caracteres"
+              placeholder="Ingresa tu contraseña"
               placeholderTextColor="#9ca3af"
               value={contrasena}
               onChangeText={setContrasena}
               secureTextEntry
+              autoComplete="off"
+              autoCorrect={false}
             />
           </View>
 
@@ -176,84 +179,100 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f3f4f6'
+    backgroundColor: '#f8fafc' // Fondo neutro, limpio y minimalista (sin azul)
   },
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
-    padding: 24
+    alignItems: 'center',
+    padding: 20
   },
   card: {
     backgroundColor: '#ffffff',
-    borderRadius: 16,
-    padding: 24,
+    borderRadius: 20,
+    padding: 32,
+    width: '100%',
+    maxWidth: 420,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#e2e8f0'
   },
   header: {
     alignItems: 'center',
-    marginBottom: 24
+    marginBottom: 28
   },
   badge: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#4f46e5',
-    backgroundColor: '#eef2ff',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginBottom: 8
+    fontWeight: '700',
+    color: '#0f172a',
+    backgroundColor: '#f1f5f9',
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 20,
+    marginBottom: 10,
+    letterSpacing: 0.5
   },
   title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#111827'
+    fontSize: 26,
+    fontWeight: '800',
+    color: '#0f172a',
+    letterSpacing: -0.5
   },
   subtitle: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#64748b',
     textAlign: 'center',
-    marginTop: 4
+    marginTop: 6,
+    lineHeight: 20
   },
   errorBox: {
-    backgroundColor: '#fee2e2',
-    padding: 10,
-    borderRadius: 8,
+    backgroundColor: '#fef2f2',
+    borderWidth: 1,
+    borderColor: '#fecaca',
+    padding: 12,
+    borderRadius: 10,
     marginBottom: 16
   },
   errorText: {
     color: '#dc2626',
     fontSize: 13,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: '500'
   },
   inputGroup: {
-    marginBottom: 16
+    marginBottom: 18
   },
   label: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#374151',
+    color: '#334155',
     marginBottom: 6
   },
   input: {
-    backgroundColor: '#f9fafb',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 10,
-    paddingHorizontal: 14,
+    backgroundColor: '#f8fafc',
+    borderWidth: 1.5,
+    borderColor: '#e2e8f0',
+    borderRadius: 12,
+    paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#111827'
+    color: '#0f172a'
   },
   button: {
-    backgroundColor: '#111827',
-    borderRadius: 10,
+    backgroundColor: '#0f172a',
+    borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
-    marginTop: 8
+    marginTop: 8,
+    shadowColor: '#0f172a',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 3
   },
   buttonDisabled: {
     opacity: 0.6
@@ -261,15 +280,17 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#ffffff',
     fontSize: 15,
-    fontWeight: '600'
+    fontWeight: '700',
+    letterSpacing: 0.3
   },
   switchButton: {
-    marginTop: 18,
+    marginTop: 20,
     alignItems: 'center'
   },
   switchText: {
-    color: '#4f46e5',
+    color: '#0f172a',
     fontSize: 13,
-    fontWeight: '500'
+    fontWeight: '600',
+    textDecorationLine: 'underline'
   }
 });

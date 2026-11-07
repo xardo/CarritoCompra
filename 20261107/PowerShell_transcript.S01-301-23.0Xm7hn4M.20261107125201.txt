@@ -1,0 +1,78 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261107125201
+Nombre de usuario: S01-301-23\Estudiantes
+Usuario RunAs: S01-301-23\Estudiantes
+Nombre de la configuración: 
+Máquina: S01-301-23 (Microsoft Windows NT 10.0.26300.0)
+Aplicación host: powershell -Command $env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
+Id. de proceso: 32096
+PSVersion: 5.1.26100.9818
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9818
+BuildVersion: 10.0.26100.9818
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+PS>$env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
+>> ErrorTerminación(): "Error al ejecutar el programa 'findstr.exe': Error interno Win32 "Acceso denegado" 0x5 al leer el búfer de salida de la consola. Póngase en contacto con los servicios de soporte al cliente de Microsoft.En línea: 1 Carácter: 87
++ ... OCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~."
+**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261107125202
+Nombre de usuario: S01-301-23\Estudiantes
+Usuario RunAs: S01-301-23\Estudiantes
+Nombre de la configuración: 
+Máquina: S01-301-23 (Microsoft Windows NT 10.0.26300.0)
+Aplicación host: powershell -Command $env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
+Id. de proceso: 32096
+PSVersion: 5.1.26100.9818
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9818
+BuildVersion: 10.0.26100.9818
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+PS>CommandInvocation(Out-String): "Out-String"
+>> EnlaceDeParámetros(Out-String): nombre="InputObject"; valor="Error al ejecutar el programa 'findstr.exe': Error interno Win32 "Acceso denegado" 0x5 al leer el búfer de salida de la consola. Póngase en contacto con los servicios de soporte al cliente de Microsoft.En línea: 1 Carácter: 87
++ ... OCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~."
+Error al ejecutar el programa 'findstr.exe': Error interno Win32 "Acceso denegado" 0x5 al leer el búfer de salida de la 
+consola. Póngase en contacto con los servicios de soporte al cliente de Microsoft.En línea: 1 Carácter: 87
++ ... OCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+En línea: 1 Carácter: 87
++ ... OCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+Error al ejecutar el programa 'findstr.exe': Error interno Win32 "Acceso denegado" 0x5 al leer el búfer de salida de la 
+consola. Póngase en contacto con los servicios de soporte al cliente de Microsoft.En línea: 1 Carácter: 87
++ ... OCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+En línea: 1 Carácter: 87
++ ... OCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+Error al ejecutar el programa 'findstr.exe': Error interno Win32 "Acceso denegado" 0x5 al leer el búfer de salida de
+la consola. Póngase en contacto con los servicios de soporte al cliente de Microsoft.En línea: 1 Carácter: 87
++ ... OCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+En línea: 1 Carácter: 87
++ ... OCALAPPDATA = $env:_LOCALAPPDATA; findstr /s /i "sqlite" package.json
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+
+PS>$global:?
+False
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20261107125204
+**********************

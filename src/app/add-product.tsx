@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,15 +12,23 @@ import {
   Platform
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SERVICES_CONFIG } from '../context/AppContext';
+import { SERVICES_CONFIG, useApp } from '../context/AppContext';
 
 export default function AddProductScreen() {
   const router = useRouter();
+  const { user } = useApp();
   const [nombreproducto, setNombreproducto] = useState('');
   const [imagenproducto, setImagenproducto] = useState('');
   const [precio, setPrecio] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Proteger la vista: requiere usuario autenticado
+  useEffect(() => {
+    if (!user) {
+      router.replace('/');
+    }
+  }, [user]);
 
   const handleSubmit = async () => {
     setErrorMsg('');

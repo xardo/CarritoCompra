@@ -8,35 +8,68 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
-  SafeAreaView
+  SafeAreaView,
+  useWindowDimensions
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useApp, Product, SERVICES_CONFIG } from '../context/AppContext';
+import { cacheProductsLocally, getLocalProducts } from '../services/offlineStorage';
 
 export default function ProductsScreen() {
   const router = useRouter();
   const { user, logout, addToCart, cart } = useApp();
+  const { width } = useWindowDimensions();
+
+  // Calcula automáticamente cuántas cards grandes caben por fila según el ancho disponible
+  // Tarjetas de aprox ~320px de ancho para que se vean grandes y llenen bien el espacio
+  const availableWidth = width - 48; // Restando paddings laterales
+  const targetCardWidth = 320;
+  const numColumns = Math.max(1, Math.min(6, Math.floor(availableWidth / targetCardWidth)));
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
 
+  // Proteger la vista: si no hay usuario autenticado, redirigir al login
+  useEffect(() => {
+    if (!user) {
+      router.replace('/');
+    }
+  }, [user]);
+
   const fetchProducts = async () => {
     try {
       setErrorMsg('');
       let response: Response | null = await fetch(`${SERVICES_CONFIG.GATEWAY_URL}/products`).catch(() => null);
       if (!response || !response.ok) {
-        response = await fetch(`${SERVICES_CONFIG.PRODUCTS_URL}/products`);
+        response = await fetch(`${SERVICES_CONFIG.PRODUCTS_URL}/products`).catch(() => null);
       }
-      if (!response.ok) {
-        throw new Error('Error al consultar microservicio de productos en Render');
+
+      if (response && response.ok) {
+        const data = await response.json();
+        setProducts(data);
+        // Guardar copia en SQLite para cuando no haya internet
+        await cacheProductsLocally(data);
+      } else {
+        // MODO OFFLINE: Si no hay internet, cargar desde SQLite
+        console.warn('⚠️ [Offline] Sin conexión a internet. Cargando catálogo desde SQLite local...');
+        const localProds = await getLocalProducts();
+        if (localProds.length > 0) {
+          setProducts(localProds);
+        } else {
+          throw new Error('No hay conexión y tampoco hay productos guardados localmente.');
+        }
       }
-      const data = await response.json();
-      setProducts(data);
     } catch (err: any) {
       console.warn('Error fetching products:', err);
-      setErrorMsg('No se pudo conectar al microservicio de productos.');
+      // Fallback a SQLite
+      const localProds = await getLocalProducts();
+      if (localProds.length > 0) {
+        setProducts(localProds);
+      } else {
+        setErrorMsg('Sin conexión a internet ni productos en caché local.');
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -145,17 +178,20 @@ export default function ProductsScreen() {
           </TouchableOpacity>
         </View>
       ) : (
-        <FlatList
-          data={products}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderProductItem}
-          numColumns={2}
-          columnWrapperStyle={styles.row}
-          contentContainerStyle={styles.listContent}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
+        <View style={styles.containerWrapper}>
+          <FlatList
+            key={`grid-${numColumns}`} // Forza el re-render al cambiar columnas
+            data={products}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderProductItem}
+            numColumns={numColumns}
+            columnWrapperStyle={styles.row}
+            contentContainerStyle={styles.listContent}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          />
+        </View>
       )}
     </SafeAreaView>
   );
@@ -240,65 +276,77 @@ const styles = StyleSheet.create({
     color: '#9ca3af',
     fontSize: 12
   },
+  containerWrapper: {
+    flex: 1,
+    width: '100%'
+  },
   listContent: {
-    padding: 12
+    padding: 24,
+    width: '100%'
   },
   row: {
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    gap: 20,
+    marginBottom: 20
   },
   card: {
     backgroundColor: '#ffffff',
-    borderRadius: 12,
-    marginBottom: 12,
-    width: '48.5%',
+    borderRadius: 16,
+    flex: 1,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#e5e7eb'
+    borderColor: '#e2e8f0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 3
   },
   image: {
     width: '100%',
-    height: 130,
-    backgroundColor: '#f3f4f6'
+    height: 210, // Imagen más grande y llamativa
+    backgroundColor: '#f1f5f9'
   },
   cardContent: {
-    padding: 10
+    padding: 16
   },
   idBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#f3f4f6',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-    marginBottom: 4
-  },
-  idText: {
-    fontSize: 10,
-    color: '#6b7280',
-    fontWeight: '600'
-  },
-  productName: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#111827',
-    minHeight: 34
-  },
-  productPrice: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#10b981',
-    marginTop: 4,
+    backgroundColor: '#f1f5f9',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
     marginBottom: 8
   },
+  idText: {
+    fontSize: 12,
+    color: '#475569',
+    fontWeight: '700'
+  },
+  productName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#0f172a',
+    minHeight: 44,
+    lineHeight: 22
+  },
+  productPrice: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#059669',
+    marginTop: 6,
+    marginBottom: 14
+  },
   addButton: {
-    backgroundColor: '#111827',
-    borderRadius: 6,
-    paddingVertical: 8,
+    backgroundColor: '#0f172a',
+    borderRadius: 10,
+    paddingVertical: 12,
     alignItems: 'center'
   },
   addButtonText: {
     color: '#ffffff',
-    fontSize: 11,
-    fontWeight: '600'
+    fontSize: 13,
+    fontWeight: '700'
   },
   centerContainer: {
     flex: 1,

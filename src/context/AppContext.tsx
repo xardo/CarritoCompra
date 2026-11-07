@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getDatabase, getAllOfflinePurchases } from '../services/offlineStorage';
+import { initNetworkSyncListener, syncPendingPurchases } from '../services/syncService';
 
 // Endpoints de Microservicios desplegados en Render
 export const SERVICES_CONFIG = {
@@ -51,6 +53,8 @@ interface AppContextType {
   calculation: CartCalculation | null;
   isCalculating: boolean;
   refreshTotals: () => Promise<void>;
+  syncNow: () => Promise<number>;
+  viewLocalPurchases: () => Promise<any[]>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -175,6 +179,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     refreshTotals();
   }, [cart]);
 
+  // Inicializar SQLite local y el listener de sincronización por internet
+  useEffect(() => {
+    getDatabase();
+    const unsubscribe = initNetworkSyncListener((count) => {
+      console.log(`[App] Se han sincronizado automáticamente ${count} compras hacia la nube.`);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const syncNow = async () => {
+    return await syncPendingPurchases();
+  };
+
+  const viewLocalPurchases = async () => {
+    return await getAllOfflinePurchases();
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -189,7 +210,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         clearCart,
         calculation,
         isCalculating,
-        refreshTotals
+        refreshTotals,
+        syncNow,
+        viewLocalPurchases
       }}
     >
       {children}
