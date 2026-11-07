@@ -1,0 +1,33 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261107112246
+Nombre de usuario: S01-301-23\Estudiantes
+Usuario RunAs: S01-301-23\Estudiantes
+Nombre de la configuración: 
+Máquina: S01-301-23 (Microsoft Windows NT 10.0.26300.0)
+Aplicación host: powershell -Command $env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; Get-Command npm -All
+Id. de proceso: 26864
+PSVersion: 5.1.26100.9818
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9818
+BuildVersion: 10.0.26100.9818
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+PS>$env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; Get-Command npm -All
+
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+ExternalScript  npm.ps1                                                       C:\Program Files\nodejs\npm.ps1
+Application     npm.cmd                                            0.0.0.0    C:\Program Files\nodejs\npm.cmd
+Application     npm                                                0.0.0.0    C:\Program Files\nodejs\npm
+
+
+PS>$global:?
+True
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20261107112247
+**********************

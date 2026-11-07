@@ -1,0 +1,48 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261107111141
+Nombre de usuario: S01-301-23\Estudiantes
+Usuario RunAs: S01-301-23\Estudiantes
+Nombre de la configuración: 
+Máquina: S01-301-23 (Microsoft Windows NT 10.0.26300.0)
+Aplicación host: powershell -Command $env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; dir
+Id. de proceso: 15244
+PSVersion: 5.1.26100.9818
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9818
+BuildVersion: 10.0.26100.9818
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+PS>$env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; dir
+
+
+    Directorio: C:\Users\Estudiantes\Downloads\CarritoCompra
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----      7/11/2026  10:50 a. m.                .vscode
+d-----      7/11/2026  11:11 a. m.                20261107
+d-----      7/11/2026  10:50 a. m.                assets
+d-----      7/11/2026  10:51 a. m.                node_modules
+d-----      7/11/2026  10:50 a. m.                scripts
+d-----      7/11/2026  10:50 a. m.                src
+-a----      7/11/2026  10:50 a. m.            449 .gitignore
+-a----      7/11/2026  10:50 a. m.           2598 AGENTS.md
+-a----      7/11/2026  10:50 a. m.           1065 app.json
+-a----      7/11/2026  10:50 a. m.           1106 LICENSE
+-a----      7/11/2026  10:51 a. m.         291622 package-lock.json
+-a----      7/11/2026  10:50 a. m.           1213 package.json
+-a----      7/11/2026  11:02 a. m.           2207 README.md
+-a----      7/11/2026  10:50 a. m.            298 tsconfig.json
+
+
+PS>$global:?
+True
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20261107111142
+**********************

@@ -1,0 +1,72 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261107111313
+Nombre de usuario: S01-301-23\Estudiantes
+Usuario RunAs: S01-301-23\Estudiantes
+Nombre de la configuración: 
+Máquina: S01-301-23 (Microsoft Windows NT 10.0.26300.0)
+Aplicación host: powershell -Command $env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; cd backend\auth-service; npm install
+Id. de proceso: 11788
+PSVersion: 5.1.26100.9818
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9818
+BuildVersion: 10.0.26100.9818
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+PS>$env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; cd backend\auth-service; npm install
+**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261107111313
+Nombre de usuario: S01-301-23\Estudiantes
+Usuario RunAs: S01-301-23\Estudiantes
+Nombre de la configuración: 
+Máquina: S01-301-23 (Microsoft Windows NT 10.0.26300.0)
+Aplicación host: powershell -Command $env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; cd backend\auth-service; npm install
+Id. de proceso: 11788
+PSVersion: 5.1.26100.9818
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9818
+BuildVersion: 10.0.26100.9818
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+PS>CommandInvocation(Out-String): "Out-String"
+>> EnlaceDeParámetros(Out-String): nombre="InputObject"; valor="No se puede cargar el archivo C:\Program Files\nodejs\npm.ps1. El archivo C:\Program Files\nodejs\npm.ps1 no está firmado digitalmente. No se puede ejecutar este script en el sistema actual. Para obtener más información acerca de la ejecución de scripts y la configuración de la directiva de ejecución, consulta about_Execution_Policies en https:/go.microsoft.com/fwlink/?LinkID=135170."
+npm : No se puede cargar el archivo C:\Program Files\nodejs\npm.ps1. El archivo C:\Program Files\nodejs\npm.ps1 no está 
+firmado digitalmente. No se puede ejecutar este script en el sistema actual. Para obtener más información acerca de la 
+ejecución de scripts y la configuración de la directiva de ejecución, consulta about_Execution_Policies en 
+https:/go.microsoft.com/fwlink/?LinkID=135170.
+En línea: 1 Carácter: 112
++ ... CALAPPDATA = $env:_LOCALAPPDATA; cd backend\auth-service; npm install
++                                                               ~~~
+    + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+npm : No se puede cargar el archivo C:\Program Files\nodejs\npm.ps1. El archivo C:\Program Files\nodejs\npm.ps1 no está 
+firmado digitalmente. No se puede ejecutar este script en el sistema actual. Para obtener más información acerca de la 
+ejecución de scripts y la configuración de la directiva de ejecución, consulta about_Execution_Policies en 
+https:/go.microsoft.com/fwlink/?LinkID=135170.
+En línea: 1 Carácter: 112
++ ... CALAPPDATA = $env:_LOCALAPPDATA; cd backend\auth-service; npm install
++                                                               ~~~
+    + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+npm : No se puede cargar el archivo C:\Program Files\nodejs\npm.ps1. El archivo C:\Program Files\nodejs\npm.ps1 no
+está firmado digitalmente. No se puede ejecutar este script en el sistema actual. Para obtener más información acerca
+de la ejecución de scripts y la configuración de la directiva de ejecución, consulta about_Execution_Policies en
+https:/go.microsoft.com/fwlink/?LinkID=135170.
+En línea: 1 Carácter: 112
++ ... CALAPPDATA = $env:_LOCALAPPDATA; cd backend\auth-service; npm install
++                                                               ~~~
+    + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+PS>$global:?
+False
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20261107111313
+**********************

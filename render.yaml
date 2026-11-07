@@ -1,0 +1,73 @@
+services:
+  # 1. API Gateway
+  - type: web
+    name: carrito-gateway
+    env: node
+    plan: free
+    rootDir: backend/gateway
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: AUTH_SERVICE_URL
+        fromService:
+          type: web
+          name: carrito-auth-service
+          property: host
+      - key: PRODUCTS_SERVICE_URL
+        fromService:
+          type: web
+          name: carrito-products-service
+          property: host
+      - key: ORDERS_SERVICE_URL
+        fromService:
+          type: web
+          name: carrito-orders-service
+          property: host
+
+  # 2. Microservicio de Autenticación & Usuarios
+  - type: web
+    name: carrito-auth-service
+    env: node
+    plan: free
+    rootDir: backend/auth-service
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_p9ZMK0DnQOzv@ep-plain-dream-bb1g6sq3.c-15.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - key: JWT_SECRET
+        generateValue: true
+
+  # 3. Microservicio de Productos
+  - type: web
+    name: carrito-products-service
+    env: node
+    plan: free
+    rootDir: backend/products-service
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_p9ZMK0DnQOzv@ep-plain-dream-bb1g6sq3.c-15.us-east-1.aws.neon.tech/neondb?sslmode=require
+
+  # 4. Microservicio de Precios & Facturación de Compras
+  - type: web
+    name: carrito-orders-service
+    env: node
+    plan: free
+    rootDir: backend/orders-service
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_p9ZMK0DnQOzv@ep-plain-dream-bb1g6sq3.c-15.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - key: TAX_RATE
+        value: 0.19

@@ -1,98 +1,266 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { useApp, API_BASE_URL } from '../context/AppContext';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+export default function LoginScreen() {
+  const router = useRouter();
+  const { login } = useApp();
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [nombre, setNombre] = useState('');
+  const [correo, setCorreo] = useState('admin@demo.com');
+  const [contrasena, setContrasena] = useState('123456');
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleSubmit = async () => {
+    setErrorMsg('');
+    if (!correo.trim() || !contrasena.trim()) {
+      setErrorMsg('Por favor completa todos los campos requeridos');
+      return;
+    }
+
+    if (isRegistering && !nombre.trim()) {
+      setErrorMsg('El nombre es obligatorio para registrarse');
+      return;
+    }
+
+    setLoading(true);
+    const endpoint = isRegistering ? `${API_BASE_URL}/auth/register` : `${API_BASE_URL}/auth/login`;
+    const payload = isRegistering ? { nombre, correo, contrasena } : { correo, contrasena };
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Ocurrió un error en la solicitud');
+      }
+
+      login(data.user, data.token);
+      router.replace('/products');
+    } catch (err: any) {
+      console.warn('Fallo de red o microservicio:', err);
+      // Notificar al usuario con claridad
+      const msg = err.message || 'No se pudo conectar al microservicio de autenticación';
+      setErrorMsg(msg);
+      if (Platform.OS !== 'web') {
+        Alert.alert('Atención', msg);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.card}>
+          <View style={styles.header}>
+            <Text style={styles.badge}>Microservicio Auth</Text>
+            <Text style={styles.title}>{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</Text>
+            <Text style={styles.subtitle}>
+              {isRegistering
+                ? 'Regístrate para comprar y gestionar productos'
+                : 'Ingresa con tu correo y contraseña'}
+            </Text>
+          </View>
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+          {errorMsg ? (
+            <View style={styles.errorBox}>
+              <Text style={styles.errorText}>{errorMsg}</Text>
+            </View>
+          ) : null}
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+          {isRegistering && (
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Nombre completo</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Ej. Juan Pérez"
+                placeholderTextColor="#9ca3af"
+                value={nombre}
+                onChangeText={setNombre}
+                autoCapitalize="words"
+              />
+            </View>
+          )}
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Correo electrónico</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="ejemplo@correo.com"
+              placeholderTextColor="#9ca3af"
+              value={correo}
+              onChangeText={setCorreo}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Contraseña</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Mínimo 6 caracteres"
+              placeholderTextColor="#9ca3af"
+              value={contrasena}
+              onChangeText={setContrasena}
+              secureTextEntry
+            />
+          </View>
+
+          <TouchableOpacity
+            style={[styles.button, loading && styles.buttonDisabled]}
+            onPress={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#ffffff" />
+            ) : (
+              <Text style={styles.buttonText}>
+                {isRegistering ? 'Registrarse' : 'Ingresar'}
+              </Text>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.switchButton}
+            onPress={() => {
+              setIsRegistering(!isRegistering);
+              setErrorMsg('');
+            }}
+          >
+            <Text style={styles.switchText}>
+              {isRegistering
+                ? '¿Ya tienes una cuenta? Inicia sesión'
+                : '¿No tienes cuenta? Regístrate aquí'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    backgroundColor: '#f3f4f6'
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
+  scrollContent: {
+    flexGrow: 1,
     justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    padding: 24
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 24
+  },
+  badge: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#4f46e5',
+    backgroundColor: '#eef2ff',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginBottom: 8
   },
   title: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#111827'
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#6b7280',
     textAlign: 'center',
+    marginTop: 4
   },
-  code: {
-    textTransform: 'uppercase',
+  errorBox: {
+    backgroundColor: '#fee2e2',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 16
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  errorText: {
+    color: '#dc2626',
+    fontSize: 13,
+    textAlign: 'center'
   },
+  inputGroup: {
+    marginBottom: 16
+  },
+  label: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 6
+  },
+  input: {
+    backgroundColor: '#f9fafb',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 15,
+    color: '#111827'
+  },
+  button: {
+    backgroundColor: '#111827',
+    borderRadius: 10,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 8
+  },
+  buttonDisabled: {
+    opacity: 0.6
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: '600'
+  },
+  switchButton: {
+    marginTop: 18,
+    alignItems: 'center'
+  },
+  switchText: {
+    color: '#4f46e5',
+    fontSize: 13,
+    fontWeight: '500'
+  }
 });

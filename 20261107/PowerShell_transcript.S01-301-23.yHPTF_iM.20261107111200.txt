@@ -1,0 +1,46 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261107111200
+Nombre de usuario: S01-301-23\Estudiantes
+Usuario RunAs: S01-301-23\Estudiantes
+Nombre de la configuración: 
+Máquina: S01-301-23 (Microsoft Windows NT 10.0.26300.0)
+Aplicación host: powershell -Command $env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; mkdir backend; mkdir backend\auth-service; mkdir backend\products-service; mkdir backend\orders-service; mkdir backend\gateway
+Id. de proceso: 21832
+PSVersion: 5.1.26100.9818
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9818
+BuildVersion: 10.0.26100.9818
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+PS>$env:TEMP = $env:_TEMP; $env:TMP = $env:_TMP; $env:LOCALAPPDATA = $env:_LOCALAPPDATA; mkdir backend; mkdir backend\auth-service; mkdir backend\products-service; mkdir backend\orders-service; mkdir backend\gateway
+
+
+    Directorio: C:\Users\Estudiantes\Downloads\CarritoCompra
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----      7/11/2026  11:12 a. m.                backend
+
+
+    Directorio: C:\Users\Estudiantes\Downloads\CarritoCompra\backend
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----      7/11/2026  11:12 a. m.                auth-service
+d-----      7/11/2026  11:12 a. m.                products-service
+d-----      7/11/2026  11:12 a. m.                orders-service
+d-----      7/11/2026  11:12 a. m.                gateway
+
+
+PS>$global:?
+True
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20261107111200
+**********************
