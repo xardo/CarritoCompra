@@ -11,7 +11,7 @@ import {
   Platform
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useApp, CartItem, API_BASE_URL } from '../context/AppContext';
+import { useApp, CartItem, SERVICES_CONFIG } from '../context/AppContext';
 
 export default function CartScreen() {
   const router = useRouter();
@@ -31,15 +31,25 @@ export default function CartScreen() {
 
     setProcessingOrder(true);
     try {
-      // Llamada al microservicio de órdenes/compras para persistir en Neon Database
-      const response = await fetch(`${API_BASE_URL}/orders/checkout`, {
+      const payload = JSON.stringify({
+        usuario_id: user.id,
+        items: cart
+      });
+
+      // Llamada al microservicio de compras en Render
+      let response: Response | null = await fetch(`${SERVICES_CONFIG.GATEWAY_URL}/orders/checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          usuario_id: user.id,
-          items: cart
-        })
-      });
+        body: payload
+      }).catch(() => null);
+
+      if (!response || !response.ok) {
+        response = await fetch(`${SERVICES_CONFIG.ORDERS_URL}/checkout`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload
+        });
+      }
 
       const data = await response.json();
 

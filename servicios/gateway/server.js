@@ -13,6 +13,20 @@ const ORDERS_SERVICE_URL = process.env.ORDERS_SERVICE_URL || 'http://localhost:4
 
 app.use(cors());
 
+// Ruta raíz informativa del Gateway
+app.get('/', (req, res) => {
+  res.json({
+    service: 'api-gateway',
+    status: 'online',
+    description: 'API Gateway Central de Microservicios',
+    routes: {
+      auth: '/api/auth/*',
+      products: '/api/products/*',
+      orders: '/api/orders/*'
+    }
+  });
+});
+
 // Health check del Gateway
 app.get('/health', (req, res) => {
   res.json({

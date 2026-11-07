@@ -12,6 +12,21 @@ const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_jwt_cart_key_2026';
 app.use(cors());
 app.use(express.json());
 
+// Ruta raíz informativa
+app.get('/', (req, res) => {
+  res.json({
+    service: 'auth-service',
+    status: 'online',
+    description: 'Microservicio de Autenticación y Usuarios',
+    endpoints: {
+      health: 'GET /health',
+      register: 'POST /register (body: nombre, correo, contrasena)',
+      login: 'POST /login (body: correo, contrasena)',
+      verify: 'GET /verify'
+    }
+  });
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ service: 'auth-service', status: 'healthy', timestamp: new Date() });

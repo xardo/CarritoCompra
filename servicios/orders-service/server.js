@@ -11,6 +11,22 @@ const TAX_RATE = parseFloat(process.env.TAX_RATE || '0.19');
 app.use(cors());
 app.use(express.json());
 
+// Ruta raíz informativa
+app.get('/', (req, res) => {
+  res.json({
+    service: 'orders-service',
+    status: 'online',
+    description: 'Microservicio de Facturación, Compras y Cálculo de IVA',
+    taxRate: TAX_RATE,
+    endpoints: {
+      health: 'GET /health',
+      calculate: 'POST /calculate (body: items)',
+      checkout: 'POST /checkout (body: usuario_id, items)',
+      userOrders: 'GET /user-orders/:usuario_id'
+    }
+  });
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ service: 'orders-service', status: 'healthy', taxRate: TAX_RATE, timestamp: new Date() });

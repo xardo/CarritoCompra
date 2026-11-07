@@ -1,8 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Si estás usando en emulador Android cambia localhost por 10.0.2.2 o la IP local / URL de Render
-// En Render usarás la URL pública que Render te otorgue (ej. https://carrito-gateway.onrender.com/api)
-export const API_BASE_URL = 'http://localhost:4000/api';
+// Endpoints de Microservicios desplegados en Render
+export const SERVICES_CONFIG = {
+  // Si en el Gateway tienes configuradas las variables AUTH_SERVICE_URL, etc., puedes usarlo
+  // O conectar directamente a cada microservicio en Render para máxima velocidad y evitar saltos extra:
+  AUTH_URL: 'https://carrito-auth-service.onrender.com',
+  PRODUCTS_URL: 'https://carrito-products-service.onrender.com',
+  ORDERS_URL: 'https://carrito-orders-service.onrender.com',
+  GATEWAY_URL: 'https://carrito-gateway.onrender.com/api'
+};
+
+export const API_BASE_URL = SERVICES_CONFIG.GATEWAY_URL;
 
 export interface User {
   id: number;
@@ -117,11 +125,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     setIsCalculating(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/orders/calculate`, {
+      // Intenta vía Gateway o directo al servicio de órdenes
+      let res = await fetch(`${SERVICES_CONFIG.GATEWAY_URL}/orders/calculate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items: cart })
-      });
+      }).catch(() => null);
+
+      if (!res || !res.ok) {
+        res = await fetch(`${SERVICES_CONFIG.ORDERS_URL}/calculate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: cart })
+        });
+      }
       if (res.ok) {
         const data = await res.json();
         setCalculation(data);

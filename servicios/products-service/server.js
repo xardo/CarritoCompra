@@ -9,6 +9,22 @@ const PORT = process.env.PORT || 4002;
 app.use(cors());
 app.use(express.json());
 
+// Ruta raíz informativa
+app.get('/', (req, res) => {
+  res.json({
+    service: 'products-service',
+    status: 'online',
+    description: 'Microservicio de Catálogo de Productos',
+    endpoints: {
+      health: 'GET /health',
+      getProducts: 'GET /products',
+      getProductById: 'GET /products/:id',
+      createProduct: 'POST /products (body: nombreproducto, imagenproducto, precio)',
+      deleteProduct: 'DELETE /products/:id'
+    }
+  });
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ service: 'products-service', status: 'healthy', timestamp: new Date() });

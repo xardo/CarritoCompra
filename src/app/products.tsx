@@ -11,7 +11,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useApp, Product, API_BASE_URL } from '../context/AppContext';
+import { useApp, Product, SERVICES_CONFIG } from '../context/AppContext';
 
 export default function ProductsScreen() {
   const router = useRouter();
@@ -25,9 +25,12 @@ export default function ProductsScreen() {
   const fetchProducts = async () => {
     try {
       setErrorMsg('');
-      const response = await fetch(`${API_BASE_URL}/products`);
+      let response: Response | null = await fetch(`${SERVICES_CONFIG.GATEWAY_URL}/products`).catch(() => null);
+      if (!response || !response.ok) {
+        response = await fetch(`${SERVICES_CONFIG.PRODUCTS_URL}/products`);
+      }
       if (!response.ok) {
-        throw new Error('Error al consultar microservicio de productos');
+        throw new Error('Error al consultar microservicio de productos en Render');
       }
       const data = await response.json();
       setProducts(data);

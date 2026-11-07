@@ -12,7 +12,7 @@ import {
   Alert
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useApp, API_BASE_URL } from '../context/AppContext';
+import { useApp, SERVICES_CONFIG } from '../context/AppContext';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -38,15 +38,24 @@ export default function LoginScreen() {
     }
 
     setLoading(true);
-    const endpoint = isRegistering ? `${API_BASE_URL}/auth/register` : `${API_BASE_URL}/auth/login`;
+    const authPath = isRegistering ? 'register' : 'login';
     const payload = isRegistering ? { nombre, correo, contrasena } : { correo, contrasena };
 
     try {
-      const response = await fetch(endpoint, {
+      // Intentar primero a través del Gateway, con fallback al Auth Service directo de Render
+      let response: Response | null = await fetch(`${SERVICES_CONFIG.GATEWAY_URL}/auth/${authPath}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-      });
+      }).catch(() => null);
+
+      if (!response || !response.ok) {
+        response = await fetch(`${SERVICES_CONFIG.AUTH_URL}/${authPath}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
 
       const data = await response.json();
 

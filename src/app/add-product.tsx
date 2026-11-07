@@ -12,7 +12,7 @@ import {
   Platform
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { API_BASE_URL } from '../context/AppContext';
+import { SERVICES_CONFIG } from '../context/AppContext';
 
 export default function AddProductScreen() {
   const router = useRouter();
@@ -37,15 +37,25 @@ export default function AddProductScreen() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/products`, {
+      const payload = JSON.stringify({
+        nombreproducto,
+        imagenproducto,
+        precio: numPrice
+      });
+
+      let response: Response | null = await fetch(`${SERVICES_CONFIG.GATEWAY_URL}/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombreproducto,
-          imagenproducto,
-          precio: numPrice
-        })
-      });
+        body: payload
+      }).catch(() => null);
+
+      if (!response || !response.ok) {
+        response = await fetch(`${SERVICES_CONFIG.PRODUCTS_URL}/products`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload
+        });
+      }
 
       const data = await response.json();
       if (!response.ok) {
